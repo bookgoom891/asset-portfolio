@@ -10,6 +10,11 @@ const elements = {
   logoutBtn: document.getElementById('logoutBtn'),
   registerForm: document.getElementById('registerForm'),
   registerMsg: document.getElementById('registerMsg'),
+  openRegister: document.getElementById('openRegister'),
+  closeRegister: document.getElementById('closeRegister'),
+  registerModal: document.getElementById('registerModal'),
+  registerSuccessModal: document.getElementById('registerSuccessModal'),
+  registerConfirm: document.getElementById('registerConfirm'),
   loginForm: document.getElementById('loginForm'),
   loginMsg: document.getElementById('loginMsg'),
   regUsername: document.getElementById('regUsername'),
@@ -110,6 +115,22 @@ function showAuth() {
   elements.authView.hidden = false;
   elements.appView.hidden = true;
   elements.logoutBtn.hidden = true;
+}
+
+function openRegisterModal() {
+  elements.registerModal.hidden = false;
+}
+
+function closeRegisterModal() {
+  elements.registerModal.hidden = true;
+}
+
+function openRegisterSuccess() {
+  elements.registerSuccessModal.hidden = false;
+}
+
+function closeRegisterSuccess() {
+  elements.registerSuccessModal.hidden = true;
 }
 
 function formatCurrency(value) {
@@ -330,8 +351,10 @@ function attachEvents() {
     const hash = await hashPassword(password);
     users[username] = hash;
     saveUsers(users);
-    setMessage(elements.registerMsg, '가입 완료! 로그인 해주세요.');
+    setMessage(elements.registerMsg, '');
     elements.registerForm.reset();
+    closeRegisterModal();
+    openRegisterSuccess();
   });
 
   elements.loginForm.addEventListener('submit', async (event) => {
@@ -364,6 +387,21 @@ function attachEvents() {
     resetSectorForm();
     resetAssetForm();
     renderAll();
+    showAuth();
+  });
+
+  elements.openRegister.addEventListener('click', () => {
+    elements.registerForm.reset();
+    setMessage(elements.registerMsg, '');
+    openRegisterModal();
+  });
+
+  elements.closeRegister.addEventListener('click', () => {
+    closeRegisterModal();
+  });
+
+  elements.registerConfirm.addEventListener('click', () => {
+    closeRegisterSuccess();
     showAuth();
   });
 
@@ -500,6 +538,8 @@ function init() {
   resetSectorForm();
   resetAssetForm();
   renderAll();
+  closeRegisterModal();
+  closeRegisterSuccess();
 }
 
 init();

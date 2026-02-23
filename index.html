@@ -23,23 +23,6 @@
   <main class="container">
     <section id="authView" class="card auth">
       <div class="auth-col">
-        <h2>회원가입</h2>
-        <p class="muted">아이디와 비밀번호를 먼저 만들어 주세요.</p>
-        <form id="registerForm">
-          <label>
-            아이디
-            <input type="text" id="regUsername" required minlength="3" />
-          </label>
-          <label>
-            비밀번호
-            <input type="password" id="regPassword" required minlength="6" />
-          </label>
-          <button type="submit" class="primary">가입하기</button>
-          <a class="ghost" id="openReset" href="/reset.html">비밀번호 재설정</a>
-          <p id="registerMsg" class="msg"></p>
-        </form>
-      </div>
-      <div class="auth-col">
         <h2>로그인</h2>
         <p class="muted">로컬 저장 기반의 간편 로그인입니다.</p>
         <form id="loginForm">
@@ -51,7 +34,11 @@
             비밀번호
             <input type="password" id="loginPassword" required />
           </label>
-          <button type="submit" class="primary">로그인</button>
+          <div class="button-row">
+            <button type="submit" class="primary">로그인</button>
+            <button type="button" class="ghost" id="openRegister">회원가입</button>
+            <a class="ghost" id="openReset" href="/reset.html">비밀번호 재설정</a>
+          </div>
           <p id="loginMsg" class="msg"></p>
         </form>
       </div>
@@ -164,5 +151,35 @@
   <footer class="site-footer">
     <p>데이터는 이 브라우저에만 저장됩니다.</p>
   </footer>
+
+  <div id="registerModal" class="modal" hidden>
+    <div class="modal-card">
+      <h3>회원가입</h3>
+      <p class="muted">아이디와 비밀번호를 입력하세요.</p>
+      <form id="registerForm">
+        <label>
+          아이디
+          <input type="text" id="regUsername" required minlength="3" />
+        </label>
+        <label>
+          비밀번호
+          <input type="password" id="regPassword" required minlength="6" />
+        </label>
+        <div class="button-row">
+          <button type="submit" class="primary">가입하기</button>
+          <button type="button" class="ghost" id="closeRegister">닫기</button>
+        </div>
+        <p id="registerMsg" class="msg"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="registerSuccessModal" class="modal" hidden>
+    <div class="modal-card">
+      <h3>완료되었습니다</h3>
+      <p class="muted">회원가입이 완료되었습니다.</p>
+      <button type="button" class="primary" id="registerConfirm">확인</button>
+    </div>
+  </div>
 </body>
 </html>
