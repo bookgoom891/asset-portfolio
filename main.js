@@ -6,6 +6,7 @@ const storage = {
 
 const elements = {
   authView: document.getElementById('authView'),
+  resetView: document.getElementById('resetView'),
   appView: document.getElementById('appView'),
   logoutBtn: document.getElementById('logoutBtn'),
   registerForm: document.getElementById('registerForm'),
@@ -14,6 +15,10 @@ const elements = {
   loginMsg: document.getElementById('loginMsg'),
   resetForm: document.getElementById('resetForm'),
   resetMsg: document.getElementById('resetMsg'),
+  openReset: document.getElementById('openReset'),
+  backToLogin: document.getElementById('backToLogin'),
+  resetModal: document.getElementById('resetModal'),
+  resetConfirm: document.getElementById('resetConfirm'),
   regUsername: document.getElementById('regUsername'),
   regPassword: document.getElementById('regPassword'),
   loginUsername: document.getElementById('loginUsername'),
@@ -106,14 +111,31 @@ function setMessage(el, text, isError = false) {
 
 function showApp() {
   elements.authView.hidden = true;
+  elements.resetView.hidden = true;
   elements.appView.hidden = false;
   elements.logoutBtn.hidden = false;
 }
 
 function showAuth() {
   elements.authView.hidden = false;
+  elements.resetView.hidden = true;
   elements.appView.hidden = true;
   elements.logoutBtn.hidden = true;
+}
+
+function showReset() {
+  elements.authView.hidden = true;
+  elements.resetView.hidden = false;
+  elements.appView.hidden = true;
+  elements.logoutBtn.hidden = true;
+}
+
+function openResetModal() {
+  elements.resetModal.hidden = false;
+}
+
+function closeResetModal() {
+  elements.resetModal.hidden = true;
 }
 
 function formatCurrency(value) {
@@ -374,7 +396,8 @@ function attachEvents() {
     users[username] = hash;
     saveUsers(users);
     elements.resetForm.reset();
-    setMessage(elements.resetMsg, '비밀번호가 재설정되었습니다.');
+    setMessage(elements.resetMsg, '');
+    openResetModal();
   });
 
   elements.logoutBtn.addEventListener('click', () => {
@@ -393,6 +416,21 @@ function attachEvents() {
 
   elements.assetCancel.addEventListener('click', () => {
     resetAssetForm();
+  });
+
+  elements.openReset.addEventListener('click', () => {
+    elements.resetForm.reset();
+    setMessage(elements.resetMsg, '');
+    showReset();
+  });
+
+  elements.backToLogin.addEventListener('click', () => {
+    showAuth();
+  });
+
+  elements.resetConfirm.addEventListener('click', () => {
+    closeResetModal();
+    showAuth();
   });
 
   elements.sectorForm.addEventListener('submit', (event) => {
@@ -520,6 +558,7 @@ function init() {
   resetSectorForm();
   resetAssetForm();
   renderAll();
+  closeResetModal();
 }
 
 init();

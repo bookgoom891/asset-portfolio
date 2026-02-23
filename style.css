@@ -149,12 +149,6 @@ button:hover {
   color: var(--teal);
 }
 
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 8px 0 4px;
-}
-
 h3 {
   margin: 6px 0 0;
   font-family: 'Space Grotesk', sans-serif;
@@ -211,6 +205,33 @@ h3 {
 .option-toggle input {
   width: 18px;
   height: 18px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 32, 40, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 22px 26px;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: var(--shadow);
+  text-align: center;
 }
 
 .summary .label {
