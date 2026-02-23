@@ -30,12 +30,14 @@ const elements = {
   assetId: document.getElementById('assetId'),
   assetSubmit: document.getElementById('assetSubmit'),
   assetCancel: document.getElementById('assetCancel'),
+  mergeSameAsset: document.getElementById('mergeSameAsset'),
   assetList: document.getElementById('assetList'),
   sectorSummary: document.getElementById('sectorSummary'),
   totalAmount: document.getElementById('totalAmount'),
   sectorCount: document.getElementById('sectorCount'),
   assetCount: document.getElementById('assetCount'),
-  targetSumBadge: document.getElementById('targetSumBadge')
+  targetSumBadge: document.getElementById('targetSumBadge'),
+  sectorTargetAlert: document.getElementById('sectorTargetAlert')
 };
 
 let currentUser = null;
@@ -168,11 +170,22 @@ function renderSectors() {
 
 function renderAssets() {
   elements.assetList.innerHTML = '';
+  const nameCounts = new Map();
+  const nameIndex = new Map();
+
+  state.assets.forEach((asset) => {
+    nameCounts.set(asset.name, (nameCounts.get(asset.name) || 0) + 1);
+  });
+
   state.assets.forEach((asset) => {
     const sector = state.sectors.find((s) => s.id === asset.sectorId);
+    const totalForName = nameCounts.get(asset.name) || 0;
+    const currentIndex = (nameIndex.get(asset.name) || 0) + 1;
+    nameIndex.set(asset.name, currentIndex);
+    const displayName = totalForName > 1 ? `${asset.name} (${currentIndex})` : asset.name;
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>${asset.name}</td>
+      <td>${displayName}</td>
       <td>${formatCurrency(asset.amount)}</td>
       <td>${sector ? sector.name : '미분류'}</td>
       <td><button type="button" class="ghost" data-edit="${asset.id}">수정</button></td>
@@ -235,6 +248,16 @@ function renderSummary() {
     elements.targetSumBadge.textContent = `목표 합계 ${roundedTarget}%`;
   } else {
     elements.targetSumBadge.textContent = `목표 합계 ${roundedTarget}% (100% 권장)`;
+  }
+
+  if (elements.sectorTargetAlert) {
+    if (roundedTarget > 100) {
+      elements.sectorTargetAlert.textContent = '목표 수치가 100%센트를 넘었습니다.';
+      elements.sectorTargetAlert.classList.add('is-over');
+    } else {
+      elements.sectorTargetAlert.textContent = `총 목표 비중: ${roundedTarget}%`;
+      elements.sectorTargetAlert.classList.remove('is-over');
+    }
   }
 }
 
@@ -424,7 +447,19 @@ function attachEvents() {
         asset.sectorId = sectorId;
       }
     } else {
-      state.assets.push({ id: generateId('asset'), name, amount, sectorId });
+      if (elements.mergeSameAsset && elements.mergeSameAsset.checked) {
+        const existing = state.assets.find((a) => a.name === name);
+        if (existing) {
+          existing.amount += amount;
+          if (sectorId) {
+            existing.sectorId = sectorId;
+          }
+        } else {
+          state.assets.push({ id: generateId('asset'), name, amount, sectorId });
+        }
+      } else {
+        state.assets.push({ id: generateId('asset'), name, amount, sectorId });
+      }
     }
     saveData();
     renderAll();

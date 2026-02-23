@@ -118,6 +118,7 @@
               <tbody id="sectorList"></tbody>
             </table>
           </div>
+          <div id="sectorTargetAlert" class="sector-alert" aria-live="polite"></div>
         </section>
 
         <section class="card" aria-labelledby="assetTitle">
@@ -133,6 +134,13 @@
             <button type="submit" class="primary" id="assetSubmit">추가</button>
             <button type="button" class="ghost" id="assetCancel" hidden>취소</button>
           </form>
+          <div class="option-row">
+            <label class="option-toggle">
+              <input type="checkbox" id="mergeSameAsset" />
+              같은 항목 추가 시 금액 더하기
+            </label>
+            <span class="muted">해제 시 동일 이름도 별도 항목으로 추가됩니다.</span>
+          </div>
           <div class="table-wrap">
             <table class="data-table">
               <thead>

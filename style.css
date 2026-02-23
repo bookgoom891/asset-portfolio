@@ -181,6 +181,26 @@ button:hover {
   margin-bottom: 18px;
 }
 
+.option-row {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+}
+
+.option-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.option-toggle input {
+  width: 18px;
+  height: 18px;
+}
+
 .summary .label {
   display: block;
   color: var(--muted);
@@ -215,6 +235,17 @@ button:hover {
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 0.85rem;
+}
+
+.sector-alert {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.sector-alert.is-over {
+  color: #c84215;
 }
 
 .diff-positive {
