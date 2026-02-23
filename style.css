@@ -149,6 +149,18 @@ button:hover {
   color: var(--teal);
 }
 
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0 4px;
+}
+
+h3 {
+  margin: 6px 0 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+}
+
 .muted {
   color: var(--muted);
   font-size: 0.9rem;
