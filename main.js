@@ -1,26 +1,11 @@
 const storage = {
-  usersKey: 'ap_users',
   sessionKey: 'ap_session',
   dataKey: (user) => `ap_data_${user}`
 };
 
 const elements = {
-  authView: document.getElementById('authView'),
   appView: document.getElementById('appView'),
   logoutBtn: document.getElementById('logoutBtn'),
-  registerForm: document.getElementById('registerForm'),
-  registerMsg: document.getElementById('registerMsg'),
-  openRegister: document.getElementById('openRegister'),
-  closeRegister: document.getElementById('closeRegister'),
-  registerModal: document.getElementById('registerModal'),
-  registerSuccessModal: document.getElementById('registerSuccessModal'),
-  registerConfirm: document.getElementById('registerConfirm'),
-  loginForm: document.getElementById('loginForm'),
-  loginMsg: document.getElementById('loginMsg'),
-  regUsername: document.getElementById('regUsername'),
-  regPassword: document.getElementById('regPassword'),
-  loginUsername: document.getElementById('loginUsername'),
-  loginPassword: document.getElementById('loginPassword'),
   sectorForm: document.getElementById('sectorForm'),
   sectorName: document.getElementById('sectorName'),
   sectorTarget: document.getElementById('sectorTarget'),
@@ -50,29 +35,8 @@ let state = { sectors: [], assets: [] };
 
 const currency = new Intl.NumberFormat('ko-KR');
 
-function loadUsers() {
-  return JSON.parse(localStorage.getItem(storage.usersKey) || '{}');
-}
-
-function saveUsers(users) {
-  localStorage.setItem(storage.usersKey, JSON.stringify(users));
-}
-
-async function hashPassword(password) {
-  const enc = new TextEncoder();
-  const data = enc.encode(password);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
 function getSession() {
   return localStorage.getItem(storage.sessionKey);
-}
-
-function setSession(user) {
-  localStorage.setItem(storage.sessionKey, user);
 }
 
 function clearSession() {
@@ -100,37 +64,8 @@ function saveData() {
   localStorage.setItem(storage.dataKey(currentUser), JSON.stringify(state));
 }
 
-function setMessage(el, text, isError = false) {
-  el.textContent = text;
-  el.style.color = isError ? '#c84215' : '#1f8a8a';
-}
-
 function showApp() {
-  elements.authView.hidden = true;
   elements.appView.hidden = false;
-  elements.logoutBtn.hidden = false;
-}
-
-function showAuth() {
-  elements.authView.hidden = false;
-  elements.appView.hidden = true;
-  elements.logoutBtn.hidden = true;
-}
-
-function openRegisterModal() {
-  elements.registerModal.hidden = false;
-}
-
-function closeRegisterModal() {
-  elements.registerModal.hidden = true;
-}
-
-function openRegisterSuccess() {
-  elements.registerSuccessModal.hidden = false;
-}
-
-function closeRegisterSuccess() {
-  elements.registerSuccessModal.hidden = true;
 }
 
 function formatCurrency(value) {
@@ -336,73 +271,10 @@ function generateId(prefix) {
 }
 
 function attachEvents() {
-  elements.registerForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const username = elements.regUsername.value.trim();
-    const password = elements.regPassword.value;
-
-    if (!username || !password) return;
-
-    const users = loadUsers();
-    if (users[username]) {
-      setMessage(elements.registerMsg, '이미 존재하는 아이디입니다.', true);
-      return;
-    }
-    const hash = await hashPassword(password);
-    users[username] = hash;
-    saveUsers(users);
-    setMessage(elements.registerMsg, '');
-    elements.registerForm.reset();
-    closeRegisterModal();
-    openRegisterSuccess();
-  });
-
-  elements.loginForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const username = elements.loginUsername.value.trim();
-    const password = elements.loginPassword.value;
-    const users = loadUsers();
-    if (!users[username]) {
-      setMessage(elements.loginMsg, '존재하지 않는 아이디입니다.', true);
-      return;
-    }
-    const hash = await hashPassword(password);
-    if (users[username] !== hash) {
-      setMessage(elements.loginMsg, '비밀번호가 일치하지 않습니다.', true);
-      return;
-    }
-    currentUser = username;
-    setSession(username);
-    state = loadData(username);
-    showApp();
-    renderAll();
-    elements.loginForm.reset();
-    setMessage(elements.loginMsg, '');
-  });
-
   elements.logoutBtn.addEventListener('click', () => {
     currentUser = null;
     clearSession();
-    state = { sectors: [], assets: [] };
-    resetSectorForm();
-    resetAssetForm();
-    renderAll();
-    showAuth();
-  });
-
-  elements.openRegister.addEventListener('click', () => {
-    elements.registerForm.reset();
-    setMessage(elements.registerMsg, '');
-    openRegisterModal();
-  });
-
-  elements.closeRegister.addEventListener('click', () => {
-    closeRegisterModal();
-  });
-
-  elements.registerConfirm.addEventListener('click', () => {
-    closeRegisterSuccess();
-    showAuth();
+    window.location.href = '/index.html';
   });
 
   elements.sectorCancel.addEventListener('click', () => {
@@ -531,15 +403,17 @@ function attachEvents() {
 
 function init() {
   attachEvents();
-  clearSession();
-  currentUser = null;
-  state = { sectors: [], assets: [] };
-  showAuth();
+  const sessionUser = getSession();
+  if (!sessionUser) {
+    window.location.href = '/index.html';
+    return;
+  }
+  currentUser = sessionUser;
+  state = loadData(sessionUser);
+  showApp();
   resetSectorForm();
   resetAssetForm();
   renderAll();
-  closeRegisterModal();
-  closeRegisterSuccess();
 }
 
 init();
