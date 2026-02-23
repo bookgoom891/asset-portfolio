@@ -513,19 +513,13 @@ function attachEvents() {
 
 function init() {
   attachEvents();
-  const sessionUser = getSession();
-  if (sessionUser) {
-    currentUser = sessionUser;
-    state = loadData(sessionUser);
-    showApp();
-    renderAll();
-    resetSectorForm();
-    resetAssetForm();
-  } else {
-    showAuth();
-    resetSectorForm();
-    resetAssetForm();
-  }
+  clearSession();
+  currentUser = null;
+  state = { sectors: [], assets: [] };
+  showAuth();
+  resetSectorForm();
+  resetAssetForm();
+  renderAll();
 }
 
 init();
