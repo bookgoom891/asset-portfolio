@@ -131,11 +131,15 @@ function showReset() {
 }
 
 function openResetModal() {
-  elements.resetModal.hidden = false;
+  if (elements.resetModal) {
+    elements.resetModal.hidden = false;
+  }
 }
 
 function closeResetModal() {
-  elements.resetModal.hidden = true;
+  if (elements.resetModal) {
+    elements.resetModal.hidden = true;
+  }
 }
 
 function formatCurrency(value) {
@@ -418,20 +422,26 @@ function attachEvents() {
     resetAssetForm();
   });
 
-  elements.openReset.addEventListener('click', () => {
-    elements.resetForm.reset();
-    setMessage(elements.resetMsg, '');
-    showReset();
-  });
+  if (elements.openReset) {
+    elements.openReset.addEventListener('click', () => {
+      elements.resetForm.reset();
+      setMessage(elements.resetMsg, '');
+      showReset();
+    });
+  }
 
-  elements.backToLogin.addEventListener('click', () => {
-    showAuth();
-  });
+  if (elements.backToLogin) {
+    elements.backToLogin.addEventListener('click', () => {
+      showAuth();
+    });
+  }
 
-  elements.resetConfirm.addEventListener('click', () => {
-    closeResetModal();
-    showAuth();
-  });
+  if (elements.resetConfirm) {
+    elements.resetConfirm.addEventListener('click', () => {
+      closeResetModal();
+      showAuth();
+    });
+  }
 
   elements.sectorForm.addEventListener('submit', (event) => {
     event.preventDefault();
