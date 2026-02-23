@@ -360,6 +360,10 @@ function attachEvents() {
   elements.logoutBtn.addEventListener('click', () => {
     currentUser = null;
     clearSession();
+    state = { sectors: [], assets: [] };
+    resetSectorForm();
+    resetAssetForm();
+    renderAll();
     showAuth();
   });
 
