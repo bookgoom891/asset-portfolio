@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>비밀번호 재설정</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script defer src="/reset.js"></script>
+</head>
+<body>
+  <div class="backdrop"></div>
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <h1>비밀번호 재설정</h1>
+        <p>아이디와 새 비밀번호를 입력하세요.</p>
+      </div>
+    </div>
+    <a class="ghost" href="/index.html">로그인으로</a>
+  </header>
+
+  <main class="container">
+    <section class="card auth">
+      <div class="auth-col">
+        <form id="resetForm">
+          <label>
+            아이디
+            <input type="text" id="resetUsername" required />
+          </label>
+          <label>
+            새 비밀번호
+            <input type="password" id="resetPassword" required minlength="6" />
+          </label>
+          <div class="button-row">
+            <button type="submit" class="primary">재설정</button>
+            <a class="ghost" href="/index.html">돌아가기</a>
+          </div>
+          <p id="resetMsg" class="msg"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>데이터는 이 브라우저에만 저장됩니다.</p>
+  </footer>
+
+  <div id="resetModal" class="modal" hidden>
+    <div class="modal-card">
+      <h3>완료되었습니다</h3>
+      <p class="muted">비밀번호가 재설정되었습니다.</p>
+      <button type="button" class="primary" id="resetConfirm">확인</button>
+    </div>
+  </div>
+</body>
+</html>

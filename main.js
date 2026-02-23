@@ -6,25 +6,16 @@ const storage = {
 
 const elements = {
   authView: document.getElementById('authView'),
-  resetView: document.getElementById('resetView'),
   appView: document.getElementById('appView'),
   logoutBtn: document.getElementById('logoutBtn'),
   registerForm: document.getElementById('registerForm'),
   registerMsg: document.getElementById('registerMsg'),
   loginForm: document.getElementById('loginForm'),
   loginMsg: document.getElementById('loginMsg'),
-  resetForm: document.getElementById('resetForm'),
-  resetMsg: document.getElementById('resetMsg'),
-  openReset: document.getElementById('openReset'),
-  backToLogin: document.getElementById('backToLogin'),
-  resetModal: document.getElementById('resetModal'),
-  resetConfirm: document.getElementById('resetConfirm'),
   regUsername: document.getElementById('regUsername'),
   regPassword: document.getElementById('regPassword'),
   loginUsername: document.getElementById('loginUsername'),
   loginPassword: document.getElementById('loginPassword'),
-  resetUsername: document.getElementById('resetUsername'),
-  resetPassword: document.getElementById('resetPassword'),
   sectorForm: document.getElementById('sectorForm'),
   sectorName: document.getElementById('sectorName'),
   sectorTarget: document.getElementById('sectorTarget'),
@@ -111,35 +102,14 @@ function setMessage(el, text, isError = false) {
 
 function showApp() {
   elements.authView.hidden = true;
-  elements.resetView.hidden = true;
   elements.appView.hidden = false;
   elements.logoutBtn.hidden = false;
 }
 
 function showAuth() {
   elements.authView.hidden = false;
-  elements.resetView.hidden = true;
   elements.appView.hidden = true;
   elements.logoutBtn.hidden = true;
-}
-
-function showReset() {
-  elements.authView.hidden = true;
-  elements.resetView.hidden = false;
-  elements.appView.hidden = true;
-  elements.logoutBtn.hidden = true;
-}
-
-function openResetModal() {
-  if (elements.resetModal) {
-    elements.resetModal.hidden = false;
-  }
-}
-
-function closeResetModal() {
-  if (elements.resetModal) {
-    elements.resetModal.hidden = true;
-  }
 }
 
 function formatCurrency(value) {
@@ -387,23 +357,6 @@ function attachEvents() {
     setMessage(elements.loginMsg, '');
   });
 
-  elements.resetForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const username = elements.resetUsername.value.trim();
-    const password = elements.resetPassword.value;
-    const users = loadUsers();
-    if (!users[username]) {
-      setMessage(elements.resetMsg, '존재하지 않는 아이디입니다.', true);
-      return;
-    }
-    const hash = await hashPassword(password);
-    users[username] = hash;
-    saveUsers(users);
-    elements.resetForm.reset();
-    setMessage(elements.resetMsg, '');
-    openResetModal();
-  });
-
   elements.logoutBtn.addEventListener('click', () => {
     currentUser = null;
     clearSession();
@@ -421,27 +374,6 @@ function attachEvents() {
   elements.assetCancel.addEventListener('click', () => {
     resetAssetForm();
   });
-
-  if (elements.openReset) {
-    elements.openReset.addEventListener('click', () => {
-      elements.resetForm.reset();
-      setMessage(elements.resetMsg, '');
-      showReset();
-    });
-  }
-
-  if (elements.backToLogin) {
-    elements.backToLogin.addEventListener('click', () => {
-      showAuth();
-    });
-  }
-
-  if (elements.resetConfirm) {
-    elements.resetConfirm.addEventListener('click', () => {
-      closeResetModal();
-      showAuth();
-    });
-  }
 
   elements.sectorForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -568,7 +500,6 @@ function init() {
   resetSectorForm();
   resetAssetForm();
   renderAll();
-  closeResetModal();
 }
 
 init();

@@ -35,7 +35,7 @@
             <input type="password" id="regPassword" required minlength="6" />
           </label>
           <button type="submit" class="primary">가입하기</button>
-          <button type="button" class="ghost" id="openReset">비밀번호 재설정</button>
+          <a class="ghost" id="openReset" href="/reset.html">비밀번호 재설정</a>
           <p id="registerMsg" class="msg"></p>
         </form>
       </div>
@@ -53,28 +53,6 @@
           </label>
           <button type="submit" class="primary">로그인</button>
           <p id="loginMsg" class="msg"></p>
-        </form>
-      </div>
-    </section>
-
-    <section id="resetView" class="card auth" hidden>
-      <div class="auth-col">
-        <h2>비밀번호 재설정</h2>
-        <p class="muted">아이디를 입력하고 새 비밀번호로 바꿉니다.</p>
-        <form id="resetForm">
-          <label>
-            아이디
-            <input type="text" id="resetUsername" required />
-          </label>
-          <label>
-            새 비밀번호
-            <input type="password" id="resetPassword" required minlength="6" />
-          </label>
-          <div class="button-row">
-            <button type="submit" class="primary">재설정</button>
-            <button type="button" class="ghost" id="backToLogin">돌아가기</button>
-          </div>
-          <p id="resetMsg" class="msg"></p>
         </form>
       </div>
     </section>
@@ -186,13 +164,5 @@
   <footer class="site-footer">
     <p>데이터는 이 브라우저에만 저장됩니다.</p>
   </footer>
-
-  <div id="resetModal" class="modal" hidden>
-    <div class="modal-card">
-      <h3>완료되었습니다</h3>
-      <p class="muted">비밀번호가 재설정되었습니다.</p>
-      <button type="button" class="primary" id="resetConfirm">확인</button>
-    </div>
-  </div>
 </body>
 </html>
