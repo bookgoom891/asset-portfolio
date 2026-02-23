@@ -154,11 +154,12 @@ function renderSectors() {
   state.sectors.forEach((sector) => {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>${sector.name}</td>
+      <td>
+        <input type="text" value="${sector.name}" data-id="${sector.id}" class="sector-name" />
+      </td>
       <td>
         <input type="number" min="0" max="100" step="0.1" value="${sector.target}" data-id="${sector.id}" class="sector-target" />
       </td>
-      <td><button type="button" class="ghost" data-edit="${sector.id}">수정</button></td>
       <td><button type="button" class="ghost" data-delete="${sector.id}">삭제</button></td>
     `;
     elements.sectorList.appendChild(row);
@@ -368,26 +369,32 @@ function attachEvents() {
   });
 
   elements.sectorList.addEventListener('input', (event) => {
-    const input = event.target.closest('.sector-target');
-    if (!input) return;
+    const nameInput = event.target.closest('.sector-name');
+    const targetInput = event.target.closest('.sector-target');
+    if (!nameInput && !targetInput) return;
+
+    const input = nameInput || targetInput;
     const id = input.dataset.id;
-    const target = parseFloat(input.value);
     const sector = state.sectors.find((s) => s.id === id);
-    if (!sector || Number.isNaN(target)) return;
-    sector.target = Math.min(Math.max(target, 0), 100);
+    if (!sector) return;
+
+    if (nameInput) {
+      const name = nameInput.value.trim();
+      if (name) sector.name = name;
+    }
+
+    if (targetInput) {
+      const target = parseFloat(targetInput.value);
+      if (!Number.isNaN(target)) {
+        sector.target = Math.min(Math.max(target, 0), 100);
+      }
+    }
     saveData();
     renderSummary();
   });
 
   elements.sectorList.addEventListener('click', (event) => {
-    const editBtn = event.target.closest('[data-edit]');
     const deleteBtn = event.target.closest('[data-delete]');
-    if (editBtn) {
-      const id = editBtn.dataset.edit;
-      const sector = state.sectors.find((s) => s.id === id);
-      if (sector) startSectorEdit(sector);
-      return;
-    }
     if (deleteBtn) {
       const id = deleteBtn.dataset.delete;
       state.sectors = state.sectors.filter((sector) => sector.id !== id);
